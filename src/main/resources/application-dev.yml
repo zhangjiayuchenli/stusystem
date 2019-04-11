@@ -1,0 +1,6 @@
+spring:
+  profiles: dev
+  datasource:
+    url: jdbc:mysql://localhost:3306/student?useUnicode=true&characterEncoding=utf8&useSSL=false
+    username: root
+    password: ENC(nN53CcXzXFen+u6diHUcu3dQwpMkLm2p)
