@@ -48,12 +48,12 @@ public class SocketController {
     @GetMapping("getUnReadCount")
     public Result getUnReadCount(Integer id,String type)
     {
-        if (type.equals("b"))
+        if (type.equals("teacher"))
         {
             UnReadCountsDTO list=teacherService.getUnReadCount(id);
             return Result.<UnReadCountsDTO>builder().res(list).build();
         }
-        if (type.equals("c"))
+        if (type.equals("stu"))
         {
             UnReadCountsDTO list=studentService.selectUnReadCountsByStuId(id);
             return Result.<UnReadCountsDTO>builder().res(list).build();

@@ -1,9 +1,6 @@
 package com.njit.stusystem.controller;
 
-import com.njit.stusystem.dto.AdminDTO;
-import com.njit.stusystem.dto.Result;
-import com.njit.stusystem.dto.StudentDTO;
-import com.njit.stusystem.dto.TeacherDTO;
+import com.njit.stusystem.dto.*;
 import com.njit.stusystem.model.Student;
 import com.njit.stusystem.model.Teacher;
 import com.njit.stusystem.service.AdminService;
@@ -40,39 +37,42 @@ public class LoginController {
 
     /* 登录验证，先判断用户类型，再进行用户名和密码的确认
        type=a为管理员，type=b为教师，type=c为学生用户 */
-    @GetMapping("/login")
-    public Result validate(@RequestParam("userId") Integer userId, @RequestParam("password")String password,@RequestParam("types") String types, HttpSession session){
+    @PostMapping("/login")
+    public Result validate(@RequestBody UserDTO user, HttpSession session){
 
-        System.out.println(types);
-        if (userId == null ) {
+        if (user.getId() == null ) {
             return Result.builder().code(Result.FAILED_CODE).build();
         }
-        else if (password == null || password.isEmpty()) {
-            System.out.println("789");
+        else if (user.getPassword() == null || user.getPassword().isEmpty()) {
             return Result.builder().code(Result.FAILED_CODE).build();
         }
-        else if("a".equals(types))
+        else if("admin".equals(user.getTypes()))
         {
-            System.out.println(types);
+            int userId = user.getId();
+            String password=user.getPassword();
             AdminDTO adminDTO=adminService.selectByUsernameAndPassword(userId,password);
-            if (adminDTO!=null&&userId.equals(adminDTO.getId()) && password.equals(adminDTO.getPassword())) {
+            if (adminDTO!=null&&userId==adminDTO.getId() && password.equals(adminDTO.getPassword())) {
                 session.setAttribute("id",userId);
                 return Result.<AdminDTO>builder().code(Result.SUCCESS_CODE).build();
             }
         }
-        else if ("b".equals(types))
+        else if ("teacher".equals(user.getTypes()))
         {
+            int userId = user.getId();
+            String password=user.getPassword();
             TeacherDTO teacher=teacherService.selectByUsernameAndPassword(userId, password);
-            if (userId.equals(teacher.getId()) && password.equals(teacher.getTeacherPassword())) {
+            if (userId==teacher.getId() && password.equals(teacher.getTeacherPassword())) {
                 session.setAttribute("id",userId);
                 System.out.println(teacher.getTeacherName());
                 return Result.<TeacherDTO>builder().code(Result.SUCCESS_CODE).res(teacher).build();
             }
         }
-        else if ("c".equals(types))
+        else if ("stu".equals(user.getTypes()))
         {
+            int userId = user.getId();
+            String password=user.getPassword();
             StudentDTO studentDTO=studentService.selectByUsernameAndPassword(userId,password);
-            if (userId.equals(studentDTO.getId()) && password.equals(studentDTO.getStudentPassword())) {
+            if (userId==studentDTO.getId() && password.equals(studentDTO.getStudentPassword())) {
                 session.setAttribute("id",userId);
                 System.out.println("studentName:");
                 System.out.println(studentDTO.getStudentName());

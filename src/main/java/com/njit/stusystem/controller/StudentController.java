@@ -1,13 +1,12 @@
 package com.njit.stusystem.controller;
 
-import com.njit.stusystem.dto.CourseAndYearsDTO;
-import com.njit.stusystem.dto.Result;
-import com.njit.stusystem.dto.StuAndCourseDTO;
-import com.njit.stusystem.dto.TeaAndStuDTO;
+import com.njit.stusystem.dto.*;
+import com.njit.stusystem.mapper.TeacherMapper;
 import com.njit.stusystem.model.Student;
 import com.njit.stusystem.model.Teacher;
 import com.njit.stusystem.service.StudentService;
 import io.swagger.annotations.Api;
+import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,6 +25,8 @@ public class StudentController {
     @Autowired
     private StudentService studentService;
 
+    @Autowired
+    private TeacherMapper teacherMapper;
     /*查询所有学生信息*/
     @GetMapping("selectAll")
     public Result<List<TeaAndStuDTO>> selectAll()
@@ -63,54 +64,53 @@ public class StudentController {
         return Result.builder().code(Result.SUCCESS_CODE).res("http://localhost:8080/image/"+fileName).build();
     }
 
+    //学生根据学年获得每学期各科成绩
     @GetMapping("selectCourseByYears")
-    public Result<StuAndCourseDTO> selectCourseByYears(Integer year, Integer id)
+    public Result<StuAndCourseDTO> selectCourseByYears(Integer year, HttpSession session)
     {
+        int id=(Integer)session.getAttribute("id");
         return Result.<StuAndCourseDTO>builder().res(studentService.selectCourseByStuIdAndYear(id,year)).build();
-
     }
 
     /*修改学生信息*/
     @PutMapping("updateStu")
-    public Result<List<TeaAndStuDTO>> updateStu(@RequestBody Map<String,String> map){
-        Student student=new Student();
-        student.setId(Integer.parseInt(map.get("id")));
-        student.setStudentName(map.get("name"));
-        student.setStudentEmail(map.get("email"));
-        student.setStudentPassword(map.get("password"));
-        student.setStudentPhone(map.get("phone"));
-        student.setStudentAddress(map.get("address"));
-        student.setStudentBirthday(map.get("birthday"));
-        student.setStudentSex(map.get("sex"));
-        if(map.get("teacherId")!=null)
+    public Result<List<TeaAndStuDTO>> updateStu(@RequestBody Student student,HttpSession session){
+        student.setId((Integer)session.getAttribute("id"));
+        //System.out.println(student.toString());
+        if(student.getTeacherId()!=null)
         {
-            student.setTeacherId(Integer.parseInt(map.get("teacherId")));
+            student.setTeacherId(student.getTeacherId());
         }
         studentService.updateByPrimaryKeySelective(student);
         List<TeaAndStuDTO> list=studentService.selectAll();
         return Result.<List<TeaAndStuDTO>>builder().res(list).build();
     }
 
+    @PutMapping("adminUpdateStu")
+    public Result<List<TeaAndStuDTO>> adminUpdateStu(@RequestBody StudentDTOO studentDTO){
+        //student.setId((Integer)session.getAttribute("id"));
+        //System.out.println(student.toString());
+        int teacherId=teacherMapper.selectTeacherIdByClassName(studentDTO.getClassName());
+
+        Student student = studentDTO.getStudent();
+        student.setTeacherId(teacherId);
+        studentService.updateByPrimaryKeySelective(student);
+        List<TeaAndStuDTO> list=studentService.selectAll();
+        return Result.<List<TeaAndStuDTO>>builder().res(list).build();
+    }
+
+    //根据学生学号获得学生每学期的成绩总分(用来可视化分析-折线图)
     @GetMapping("selectCourseByStuId")
-    public Result<List<CourseAndYearsDTO>> selectCourseByStuId(Integer stuId)
+    public Result<List<CourseAndYearsDTO>> selectCourseByStuId(HttpSession session)
     {
-        List<CourseAndYearsDTO> list=studentService.selectCourseByStuId(stuId);
+        List<CourseAndYearsDTO> list=studentService.selectCourseByStuId((Integer)session.getAttribute("id"));
         return Result.<List<CourseAndYearsDTO>>builder().res(list).build();
     }
 
     /*新增学生信息*/
     @PostMapping("insertStu")
-    public Result<List<TeaAndStuDTO>> insertStu(@RequestBody Map<String,String> map)
+    public Result<List<TeaAndStuDTO>> insertStu(@RequestBody Student student)
     {
-        Student student=new Student();
-        student.setStudentName(map.get("name"));
-        student.setStudentEmail(map.get("email"));
-        student.setStudentPassword(map.get("password"));
-        student.setStudentPhone(map.get("phone"));
-        student.setStudentAddress(map.get("address"));
-        student.setStudentBirthday(map.get("birthday"));
-        student.setStudentSex(map.get("sex"));
-        student.setTeacherId(Integer.parseInt(map.get("teacherId")));
         studentService.insertSelective(student);
         List<TeaAndStuDTO> list=studentService.selectAll();
         return Result.<List<TeaAndStuDTO>>builder().res(list).build();

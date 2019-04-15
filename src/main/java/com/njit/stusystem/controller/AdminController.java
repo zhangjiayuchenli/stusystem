@@ -8,6 +8,7 @@ import com.njit.stusystem.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.util.Map;
 
 
@@ -20,10 +21,9 @@ public class AdminController {
 
     /*修改管理员信息*/
     @PutMapping("updateAdmin")
-    public Result<AdminDTO> updateAdmin(@RequestBody Map<String,String> map)
+    public Result<AdminDTO> updateAdmin(@RequestBody Admin admin, HttpSession session)
     {
-        Admin admin=new Admin();
-        admin.setId(Integer.parseInt(map.get("id"))).setUsername(map.get("name")).setPassword(map.get("password"));
+        admin.setId((Integer)session.getAttribute("id"));
         adminService.updateByPrimaryKey(admin);
         return Result.<AdminDTO>builder().code(Result.SUCCESS_CODE).build();
     }

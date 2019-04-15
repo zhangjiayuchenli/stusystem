@@ -88,40 +88,28 @@ public class TeacherController {
 
     /*根据教师id修改教师信息*/
     @PutMapping("updateTeacher")
-    public Result<List<TeacherDTO>>  updateTeacher(@RequestBody Map<String,String> map) throws ParseException
+    public Result<List<TeacherDTO>>  updateTeacher(@RequestBody Teacher teacher,HttpSession session) throws ParseException
     {
-        String format = "yyyy-MM-dd";
-        Teacher teacher=new Teacher();
-        teacher.setId(Integer.parseInt(map.get("id")));
-        teacher.setTeacherName(map.get("name"));
-        teacher.setTeacherPassword(map.get("password"));
-        teacher.setTeacherEmail(map.get("email"));
-        teacher.setTeacherSex(map.get("sex"));
-        teacher.setTeacherAddress(map.get("address"));
-        teacher.setTeacherPhone(map.get("phone"));
-        Date date =new SimpleDateFormat(format).parse(map.get("birthday"));
-        teacher.setTeacherBrithday(date);
+        teacher.setId((Integer)session.getAttribute("id"));
         teacherService.updateByPrimaryKeySelective(teacher);
         List<TeacherDTO> list=teacherService.selectAll();
         return Result.<List<TeacherDTO>>builder().res(list).build();
-
     }
 
+    /*管理员根据教师id修改教师信息*/
+    @PutMapping("adminUpdateTeacher")
+    public Result<List<TeacherDTO>>  adminUpdateTeacher(@RequestBody Teacher teacher)
+    {
+        teacherService.updateByPrimaryKeySelective(teacher);
+        List<TeacherDTO> list=teacherService.selectAll();
+        return Result.<List<TeacherDTO>>builder().res(list).build();
+    }
 
 
     /*新增教师信息*/
     @PostMapping("insertTeacher")
-    public Result<List<TeacherDTO>>  insertTeacher(@RequestBody Map<String,String> map) throws ParseException
+    public Result<List<TeacherDTO>>  insertTeacher(@RequestBody Teacher teacher)
     {
-        Teacher teacher=new Teacher();
-        String format = "yyyy-MM-dd";
-        teacher.setTeacherName(map.get("name"));
-        teacher.setTeacherPassword(map.get("password"));
-        teacher.setTeacherEmail(map.get("email"));
-        teacher.setTeacherAddress(map.get("address"));
-        Date date=new SimpleDateFormat(format).parse(map.get("birthday"));
-        teacher.setTeacherPhone(map.get("phone"));
-        teacher.setTeacherBrithday(date);
         teacherService.insertSelective(teacher);
         List<TeacherDTO> list=teacherService.selectAll();
         return Result.<List<TeacherDTO>>builder().res(list).build();
@@ -229,65 +217,24 @@ public class TeacherController {
 
     /*可选择的修改学生成绩*/
     @PutMapping("updateStuCourse")
-    public Result<List<StuAndCourseDTO>> updateStuCourse(@RequestBody Map<String,String> map)
+    public Result<List<StuAndCourseDTO>> updateStuCourse(@RequestBody Course course,HttpSession session)
     {
         //id,chinese,math,english,chemistry,physics,biology,year,teacherId
-        Course course=new Course();
-        course.setId(Integer.parseInt(map.get("id")));
-        course.setPhysics(Integer.parseInt(map.get("physics")));
-        course.setMath(Integer.parseInt(map.get("math")));
-        course.setEnglish(Integer.parseInt(map.get("english")));
-        course.setChinese(Integer.parseInt(map.get("chinese")));
-        course.setBiology(Integer.parseInt(map.get("biology")));
-        course.setChemistry(Integer.parseInt(map.get("chemistry")));
         teacherService.updateStuCourse(course);
-        int year=Integer.parseInt(map.get("year"));
-        int id=Integer.parseInt(map.get("teacherId"));
+        int year=course.getSchoolYear();
+        int id=(Integer) session.getAttribute("id");
         List<StuAndCourseDTO> list=teacherService.selectCourseByYears(year,id);
         return Result.<List<StuAndCourseDTO>>builder().res(list).build();
     }
 
     /*添加学生成绩（班主任只能添加本班学生的成绩）*/
     @PostMapping("insertCourse")
-    public Result<List<StuAndCourseDTO>> insertStuCourse(@RequestBody Map<String,String> map)
+    public Result<List<StuAndCourseDTO>> insertStuCourse(@RequestBody Course course,HttpSession session)
     {
         //chinese,math,english,chemistry,name,studentId,physics,biology,schoolYears,year,teacherId
-        Course course=new Course();
-        course.setSchoolYear(Integer.parseInt(map.get("schoolYears")));
-        course.setStuId(Integer.parseInt(map.get("studentId")));
-        if (map.get("physics")!=null)
-        {
-            course.setPhysics(Integer.parseInt(map.get("physics")));
-        }
-        if (map.get("math")!=null)
-        {
-            course.setMath(Integer.parseInt(map.get("math")));
-
-        }
-        if (map.get("chemistry")!=null)
-        {
-            course.setChemistry(Integer.parseInt(map.get("chemistry")));
-
-        }
-        if (map.get("biology")!=null)
-        {
-            course.setBiology(Integer.parseInt(map.get("biology")));
-
-        }
-        if (map.get("chinese")!=null)
-        {
-            course.setChinese(Integer.parseInt(map.get("chinese")));
-
-        }
-        if (map.get("english")!=null)
-        {
-            course.setEnglish(Integer.parseInt(map.get("english")));
-
-        }
-
         teacherService.insertCourse(course);
-        int year=Integer.parseInt(map.get("schoolYears"));
-        int id=Integer.parseInt(map.get("teacherId"));
+        int year=course.getSchoolYear();
+        int id=(Integer)session.getAttribute("id");
         List<StuAndCourseDTO> list=teacherService.selectCourseByYears(year,id);
         return Result.<List<StuAndCourseDTO>>builder().res(list).build();
     }
