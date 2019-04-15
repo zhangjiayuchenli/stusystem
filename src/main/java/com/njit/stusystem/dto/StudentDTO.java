@@ -24,6 +24,8 @@ public class StudentDTO {
     private String studentAddress;
 
     private String studentEmail;
+
+
     private String studentAvatar;
 
     /**

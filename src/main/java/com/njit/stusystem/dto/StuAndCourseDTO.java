@@ -1,5 +1,6 @@
 package com.njit.stusystem.dto;
 
+import com.njit.stusystem.model.Course;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -8,10 +9,12 @@ import lombok.experimental.Accessors;
 @Getter
 @Accessors(chain = true)
 public class StuAndCourseDTO {
+
     private Integer id;
 
-    private String studentName;
-
+    /**
+     * 学年
+     */
     private Integer schoolYear;
 
     private Integer physics;
@@ -26,9 +29,12 @@ public class StuAndCourseDTO {
 
     private Integer chemistry;
 
+    private Integer stuId;
+
+    private String studentName;
+
     private Integer sum;
 
-    private Integer stuId;
 
     private Integer teacherId;
 }

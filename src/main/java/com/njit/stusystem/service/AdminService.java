@@ -43,7 +43,7 @@ public class AdminService {
     /*修改管理员信息*/
     public int updateByPrimaryKey(Admin record)
     {
-        return adminMapper.updateByPrimaryKey(record);
+        return adminMapper.updateByPrimaryKeySelective(record);
     }
 
     /*向所有教师发送消息*/
