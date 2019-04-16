@@ -19,7 +19,11 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static com.njit.stusystem.dto.Result.*;
-
+/**
+ * @author ZJY
+ * @version 1.0
+ * @date 2019/4/15 17:38
+ */
 @RestController
 @RequestMapping("teacher/")
 @Api("相关api")
@@ -182,7 +186,7 @@ public class TeacherController {
         return Result.<List<StuCourseOfYearDTO>>builder().res(list).build();
     }
 
-    /*根据学生id或姓名，和教师id，查询该学生每学年度的总分*/
+    /*根据学生id或姓名，和教师id，查询该学生每学年度的总分 text为学号或者学生姓名*/
     @GetMapping("selectSumCourseByYear")
     public Result<List<CourseAndYearsDTO>> selectCourseByYear(Integer teacherId,String text)
     {   List<CourseAndYearsDTO> list;
@@ -206,7 +210,7 @@ public class TeacherController {
         return Result.<List<StuCourseOfYearDTO>>builder().res(list).build();
     }
 
-    /*统计各个分段学生成绩*/
+    /*根据学年统计各个分段学生成绩*/
     @GetMapping("Statistics")
     public Result statistics(Integer year,Integer id)
     {

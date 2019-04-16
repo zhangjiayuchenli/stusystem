@@ -3,10 +3,8 @@ package com.njit.stusystem.controller;
 import com.njit.stusystem.dto.*;
 import com.njit.stusystem.mapper.TeacherMapper;
 import com.njit.stusystem.model.Student;
-import com.njit.stusystem.model.Teacher;
 import com.njit.stusystem.service.StudentService;
 import io.swagger.annotations.Api;
-import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,7 +14,11 @@ import java.io.File;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-
+/**
+ * @author ZJY
+ * @version 1.0
+ * @date 2019/4/15 17:38
+ */
 @RestController
 @RequestMapping("student/")
 @Api("相关api")
@@ -27,7 +29,7 @@ public class StudentController {
 
     @Autowired
     private TeacherMapper teacherMapper;
-    /*查询所有学生信息*/
+    /**查询所有学生信息*/
     @GetMapping("selectAll")
     public Result<List<TeaAndStuDTO>> selectAll()
     {
@@ -35,7 +37,7 @@ public class StudentController {
         return Result.<List<TeaAndStuDTO>>builder().res(list).build();
     }
 
-    /*上传头像*/
+    /**上传头像*/
     @PostMapping("uploadAvatar")
     public Result uploadPic(@RequestParam(value="file") MultipartFile file, HttpSession session){
         //得到上传时的原始文件名
@@ -46,15 +48,16 @@ public class StudentController {
         Student student=new Student();
         String path = "D:/daily/upload/image" ;
         File dest = new File(path + "/" + fileName);
-        if(!dest.getParentFile().exists()){ //判断文件父目录是否存在
-            dest.getParentFile().mkdir();//父目录不存在则新建文件
+        //判断文件父目录是否存在
+        if(!dest.getParentFile().exists()){
+            //父目录不存在则新建文件
+            dest.getParentFile().mkdir();
         }
         System.out.println("绝对路径:"+dest);
         try {
             //将文件保存到本地
             file.transferTo(dest);
             student.setId((Integer) session.getAttribute("id"));
-            System.out.println((Integer) session.getAttribute("id"));
             student.setStudentAvatar("http://localhost:8080/image/"+fileName);
             studentService.updateByPrimaryKeySelective(student);
         }catch(Exception e)
@@ -64,7 +67,7 @@ public class StudentController {
         return Result.builder().code(Result.SUCCESS_CODE).res("http://localhost:8080/image/"+fileName).build();
     }
 
-    //学生根据学年获得每学期各科成绩
+    /**学生根据学年获得每学期各科成绩*/
     @GetMapping("selectCourseByYears")
     public Result<StuAndCourseDTO> selectCourseByYears(Integer year, HttpSession session)
     {
@@ -72,11 +75,10 @@ public class StudentController {
         return Result.<StuAndCourseDTO>builder().res(studentService.selectCourseByStuIdAndYear(id,year)).build();
     }
 
-    /*修改学生信息*/
+    /**修改学生信息*/
     @PutMapping("updateStu")
     public Result<List<TeaAndStuDTO>> updateStu(@RequestBody Student student,HttpSession session){
         student.setId((Integer)session.getAttribute("id"));
-        //System.out.println(student.toString());
         if(student.getTeacherId()!=null)
         {
             student.setTeacherId(student.getTeacherId());
@@ -88,8 +90,7 @@ public class StudentController {
 
     @PutMapping("adminUpdateStu")
     public Result<List<TeaAndStuDTO>> adminUpdateStu(@RequestBody StudentDTOO studentDTO){
-        //student.setId((Integer)session.getAttribute("id"));
-        //System.out.println(student.toString());
+
         int teacherId=teacherMapper.selectTeacherIdByClassName(studentDTO.getClassName());
 
         Student student = studentDTO.getStudent();
@@ -99,7 +100,7 @@ public class StudentController {
         return Result.<List<TeaAndStuDTO>>builder().res(list).build();
     }
 
-    //根据学生学号获得学生每学期的成绩总分(用来可视化分析-折线图)
+    /**根据学生学号获得学生每学期的成绩总分(用来可视化分析-折线图)*/
     @GetMapping("selectCourseByStuId")
     public Result<List<CourseAndYearsDTO>> selectCourseByStuId(HttpSession session)
     {
@@ -107,7 +108,7 @@ public class StudentController {
         return Result.<List<CourseAndYearsDTO>>builder().res(list).build();
     }
 
-    /*新增学生信息*/
+    /**新增学生信息*/
     @PostMapping("insertStu")
     public Result<List<TeaAndStuDTO>> insertStu(@RequestBody Student student)
     {
@@ -117,7 +118,7 @@ public class StudentController {
 
     }
 
-    /*删除学生信息*/
+    /**删除学生信息*/
     @DeleteMapping("deleteStu")
     public Result<List<TeaAndStuDTO>> deleteStu(@RequestBody Map<String,String> map)
     {
@@ -126,7 +127,7 @@ public class StudentController {
         return Result.<List<TeaAndStuDTO>>builder().res(list).build();
     }
 
-    /*多选删除学生信息*/
+    /**多选删除学生信息*/
     @DeleteMapping("deleteStuByCheck")
     public Result<List<TeaAndStuDTO>> deleteStuByCheck(@RequestBody Map<String,List> map)
     {

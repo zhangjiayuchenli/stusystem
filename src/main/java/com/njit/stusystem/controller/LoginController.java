@@ -12,7 +12,11 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.Map;
-
+/**
+ * @author ZJY
+ * @version 1.0
+ * @date 2019/4/15 17:38
+ */
 @RestController
 public class LoginController {
     @Autowired
@@ -27,55 +31,59 @@ public class LoginController {
     @Autowired
     private TeacherService teacherService;
 
-    /*退出登录，清除session*/
+    /**退出登录，清除session*/
     @GetMapping("/logout")
     public void clearSession(HttpSession session)
     {
         session.removeAttribute("id");
+        session.removeAttribute("type");
     }
 
 
-    /* 登录验证，先判断用户类型，再进行用户名和密码的确认
+    /** 登录验证，先判断用户类型，再进行用户名和密码的确认
        type=a为管理员，type=b为教师，type=c为学生用户 */
     @PostMapping("/login")
     public Result validate(@RequestBody UserDTO user, HttpSession session){
-
+        String teacher="teacher";
+        String stu="stu";
+        String admin="admin";
         if (user.getId() == null ) {
             return Result.builder().code(Result.FAILED_CODE).build();
         }
         else if (user.getPassword() == null || user.getPassword().isEmpty()) {
             return Result.builder().code(Result.FAILED_CODE).build();
         }
-        else if("admin".equals(user.getTypes()))
+        else if(admin.equals(user.getTypes()))
         {
             int userId = user.getId();
             String password=user.getPassword();
             AdminDTO adminDTO=adminService.selectByUsernameAndPassword(userId,password);
             if (adminDTO!=null&&userId==adminDTO.getId() && password.equals(adminDTO.getPassword())) {
                 session.setAttribute("id",userId);
+                session.setAttribute("type",user.getTypes());
                 return Result.<AdminDTO>builder().code(Result.SUCCESS_CODE).build();
             }
         }
-        else if ("teacher".equals(user.getTypes()))
+        else if (teacher.equals(user.getTypes()))
         {
             int userId = user.getId();
             String password=user.getPassword();
-            TeacherDTO teacher=teacherService.selectByUsernameAndPassword(userId, password);
-            if (userId==teacher.getId() && password.equals(teacher.getTeacherPassword())) {
+            TeacherDTO teacherDTO=teacherService.selectByUsernameAndPassword(userId, password);
+            if (userId==teacherDTO.getId() && password.equals(teacherDTO.getTeacherPassword())) {
                 session.setAttribute("id",userId);
-                System.out.println(teacher.getTeacherName());
-                return Result.<TeacherDTO>builder().code(Result.SUCCESS_CODE).res(teacher).build();
+                session.setAttribute("type",user.getTypes());
+                System.out.println(teacherDTO.getTeacherName());
+                return Result.<TeacherDTO>builder().code(Result.SUCCESS_CODE).res(teacherDTO).build();
             }
         }
-        else if ("stu".equals(user.getTypes()))
+        else if (stu.equals(user.getTypes()))
         {
             int userId = user.getId();
             String password=user.getPassword();
             StudentDTO studentDTO=studentService.selectByUsernameAndPassword(userId,password);
             if (userId==studentDTO.getId() && password.equals(studentDTO.getStudentPassword())) {
                 session.setAttribute("id",userId);
-                System.out.println("studentName:");
-                System.out.println(studentDTO.getStudentName());
+                session.setAttribute("type",user.getTypes());
                 return Result.<StudentDTO>builder().code(Result.SUCCESS_CODE).res(studentDTO).build();
             }
         }

@@ -11,7 +11,11 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 import java.util.Map;
 
-
+/**
+ * @author ZJY
+ * @version 1.0
+ * @date 2019/4/15 17:38
+ */
 @RestController
 @RequestMapping("admin/")
 public class AdminController {
@@ -30,7 +34,7 @@ public class AdminController {
 
     //管理员根据类型发送消息
     @PostMapping("sendMessage")
-    public Result SendMessage(@RequestBody Map<String,String> map)
+    public Result sendMessage(@RequestBody Map<String,String> map)
     {
         if("all".equals(map.get("sendType")))
         {
