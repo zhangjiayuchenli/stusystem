@@ -10,7 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class StudentService {
@@ -35,7 +37,7 @@ public class StudentService {
         return studentMapper.selectByUsernameAndPassword(id, password);
     }
 
-    /*根据学生id和学生姓名，教师ID，查询该学生每学年度的总分*/
+    /**根据学生id和学生姓名，教师ID，查询该学生每学年度的总分*/
     public List selectCourseByStuId(Integer stuId)
     {
         List<Integer> list=courseMapper.selectCourseByStuId(stuId);
@@ -50,11 +52,23 @@ public class StudentService {
         return list2;
     }
 
-    //根据学生id查询消息
+    /**根据学生id查询消息*/
     public List<MessageDTO> selectMessageByStuId(Integer id)
     {
         messageMapper.updateStatusByUserId(id);
-        return messageMapper.selectByStuId(id);
+        return messageMapper.selectByStuId(id,"notification");
+    }
+
+    /**根据学生id查询消息*/
+    public Map<String,List> selectMessageByStuId2(Integer id)
+    {
+        messageMapper.updateStatusByUserId(id);
+        List<MessageDTO> notificationList=messageMapper.selectByStuId(id,"notification");
+        List<MessageDTO> messageList=messageMapper.selectByStuId(id,"message");
+        Map<String,List> map=new HashMap();
+        map.put("notices",notificationList);
+        map.put("message",messageList);
+        return map;
     }
     //根据学生id查询该教师未读消息
     public UnReadCountsDTO selectUnReadCountsByStuId( Integer id)

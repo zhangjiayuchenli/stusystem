@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Map;
+
 /**
  * @author ZJY
  * @version 1.0
@@ -45,8 +47,10 @@ public class SocketController {
         }
         if (stu.equals(type))
         {
-            List<MessageDTO> list=studentService.selectMessageByStuId(id);
-            return Result.<List<MessageDTO>>builder().res(list).build();
+            //List<MessageDTO> list=studentService.selectMessageByStuId(id);
+            Map list=studentService.selectMessageByStuId2(id);
+            //return Result.<List<MessageDTO>>builder().res(list).build();
+            return Result.<Map>builder().res(list).build();
         }
         return Result.<List<MessageDTO>>builder().code(Result.FAILED_CODE).build();
     }

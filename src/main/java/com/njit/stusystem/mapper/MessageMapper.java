@@ -28,7 +28,7 @@ public interface MessageMapper {
             "tb_message.datetime DESC")
     List<MessageDTO> selectByTeacherId(@Param("id") Integer id);
 
-    //根据学生id查询消息
+    /**根据学生id查询消息*/
     @Select("SELECT\n" +
             "tb_message.id,\n" +
             "tb_message.avatar,\n" +
@@ -40,10 +40,11 @@ public interface MessageMapper {
             "tb_student\n" +
             "WHERE\n" +
             "tb_student.id = tb_message.user_id AND\n" +
-            "tb_student.id = #{id}\n"+
+            "tb_student.id = #{id} AND\n" +
+            "tb_message.type = #{messageType}\n" +
             "ORDER BY\n" +
             "tb_message.datetime DESC")
-    List<MessageDTO> selectByStuId(@Param("id") Integer id);
+    List<MessageDTO> selectByStuId(@Param("id") Integer id,@Param("messageType") String type);
 
     //根据学生或教师id修改消息未读状态
     @Update("UPDATE tb_message SET status='0' WHERE user_id=#{id}")
@@ -61,7 +62,7 @@ public interface MessageMapper {
             "tb_teacher.id = tb_message.user_id")
     UnReadCountsDTO selectUnReadCounts(@Param("id") Integer id);
 
-    //根据学生id查询该教师未读消息数量
+    //根据学生id查询该学生未读消息数量
     @Select("SELECT\n" +
             "count(*) AS count\n" +
             "FROM\n" +
