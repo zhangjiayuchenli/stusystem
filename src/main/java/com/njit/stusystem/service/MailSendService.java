@@ -15,15 +15,13 @@ import java.util.Random;
 public class MailSendService {
 
     @Autowired
-    private JavaMailSender javaMailSender;
+    private  JavaMailSender javaMailSender;
 
     @Value("${spring.mail.username}")
-    private String userName="qaq";
+    private  String userName="qaq";
 
-    private  String verifyCode;
-
-    /*发送邮件，随机验证码*/
-    public String sendWithHTMLTemplate(String email) {
+    /** 发送邮件，随机验证码*/
+    public  String sendWithHTMLTemplate(String email) {
         try {
             //发件人的昵称
             String nick = MimeUtility.encodeText(userName);
@@ -34,7 +32,7 @@ public class MailSendService {
             mimeMessageHelper.setTo(email);
             mimeMessageHelper.setFrom(from);
             mimeMessageHelper.setSubject("登录验证码");
-            verifyCode = String.valueOf(new Random().nextInt(899999) + 100000);
+            String verifyCode = String.valueOf(new Random().nextInt(899999) + 100000);
             mimeMessageHelper.setText("您的验证码为: "+verifyCode+",有效时间为两分钟");
             javaMailSender.send(mimeMessage);
             return verifyCode;

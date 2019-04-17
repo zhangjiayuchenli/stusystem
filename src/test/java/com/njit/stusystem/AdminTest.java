@@ -2,14 +2,11 @@ package com.njit.stusystem;
 
 import com.njit.stusystem.mapper.AdminMapper;
 import com.njit.stusystem.mapper.MessageMapper;
-import com.njit.stusystem.model.Message;
 import com.njit.stusystem.model.Student;
 import com.njit.stusystem.service.AdminService;
 import com.njit.stusystem.service.MailSendService;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.Random;
 
 public class AdminTest extends BaseTest {
 
