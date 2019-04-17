@@ -18,15 +18,15 @@ public class MailSendService {
     private JavaMailSender javaMailSender;
 
     @Value("${spring.mail.username}")
-    private String uesrName="qaq";
+    private String userName="qaq";
 
-    public static String verifyCode;
+    private  String verifyCode;
 
     /*发送邮件，随机验证码*/
-    public boolean sendWithHTMLTemplate(String email) {
+    public String sendWithHTMLTemplate(String email) {
         try {
             //发件人的昵称
-            String nick = MimeUtility.encodeText(uesrName);
+            String nick = MimeUtility.encodeText(userName);
             //发件人是谁
             InternetAddress from = new InternetAddress(nick + "<1352029800@qq.com>");
             MimeMessage mimeMessage = javaMailSender.createMimeMessage();
@@ -35,11 +35,12 @@ public class MailSendService {
             mimeMessageHelper.setFrom(from);
             mimeMessageHelper.setSubject("登录验证码");
             verifyCode = String.valueOf(new Random().nextInt(899999) + 100000);
-            mimeMessageHelper.setText("你的验证码为"+verifyCode);
+            mimeMessageHelper.setText("您的验证码为: "+verifyCode+",有效时间为两分钟");
             javaMailSender.send(mimeMessage);
-            return true;
+            return verifyCode;
         } catch (Exception e) {
-            return false;
+            e.printStackTrace();
+            return "error";
         }
     }
 }

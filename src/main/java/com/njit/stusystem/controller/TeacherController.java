@@ -70,7 +70,7 @@ public class TeacherController {
     }
 
 
-    /*根据教师id查询教师信息*/
+    /**根据教师id查询教师信息*/
     @ApiOperation(value = "根据ID查询教师信息",notes = "用于测试接口")
     @ApiImplicitParam(name = "id", value = "教师ID", required = true, dataType = "int")
     @GetMapping(value = "selectById")
@@ -79,7 +79,7 @@ public class TeacherController {
         return teacherService.selectById(id);
     }
 
-    /*根据教师姓名查询教师信息*/
+    /**根据教师姓名查询教师信息*/
     @GetMapping("selectByName")
     public Result<TeacherDTO> selectByName(@RequestBody Map<String,List> map)
     {
@@ -90,7 +90,7 @@ public class TeacherController {
         return Result.<TeacherDTO>builder().code(SUCCESS_CODE).res(list2).build();
     }
 
-    /*根据教师id修改教师信息*/
+    /**根据教师id修改教师信息*/
     @PutMapping("updateTeacher")
     public Result<List<TeacherDTO>>  updateTeacher(@RequestBody Teacher teacher,HttpSession session) throws ParseException
     {
@@ -100,7 +100,7 @@ public class TeacherController {
         return Result.<List<TeacherDTO>>builder().res(list).build();
     }
 
-    /*管理员根据教师id修改教师信息*/
+    /**管理员根据教师id修改教师信息*/
     @PutMapping("adminUpdateTeacher")
     public Result<List<TeacherDTO>>  adminUpdateTeacher(@RequestBody Teacher teacher)
     {
@@ -110,7 +110,7 @@ public class TeacherController {
     }
 
 
-    /*新增教师信息*/
+    /**新增教师信息*/
     @PostMapping("insertTeacher")
     public Result<List<TeacherDTO>>  insertTeacher(@RequestBody Teacher teacher)
     {
@@ -120,7 +120,7 @@ public class TeacherController {
 
     }
 
-    /*删除学生成绩*/
+    /**删除学生成绩*/
     @DeleteMapping("deleteStuAndCourse")
     public Result<List<StuAndCourseDTO>> deleteStuAndCourse(@RequestBody Map<String,String> map)
     {
@@ -129,7 +129,7 @@ public class TeacherController {
         return Result.<List<StuAndCourseDTO>>builder().code(SUCCESS_CODE).res(list).build();
     }
 
-    /*根据教师id删除教师信息*/
+    /**根据教师id删除教师信息*/
     @DeleteMapping("deleteByPrimaryKey")
     public Result<List<TeacherDTO>> deleteByPrimaryKey(@RequestBody Map<String,String> map)
     {
@@ -138,7 +138,7 @@ public class TeacherController {
         return Result.<List<TeacherDTO>>builder().code(SUCCESS_CODE).res(list).build();
     }
 
-    /*根据教师id多选删除教师信息*/
+    /**根据教师id多选删除教师信息*/
     @DeleteMapping("deleteByPrimaryKeyAndCheck")
     public Result<List<TeacherDTO>> deleteByPrimaryKeyAndCheck(@RequestBody Map<String,List> map)
     {
@@ -149,7 +149,7 @@ public class TeacherController {
         return Result.<List<TeacherDTO>>builder().code(Result.SUCCESS_CODE).res(list2).build();
     }
 
-    /*多选删除学生成绩*/
+    /**多选删除学生成绩*/
     @DeleteMapping("deleteStuAndCourseByCheck")
     public Result<List<StuAndCourseDTO>> deleteStuAndCourseByCheck(@RequestBody Map<String,List> map)
     {
@@ -164,7 +164,7 @@ public class TeacherController {
         return Result.<List<StuAndCourseDTO>>builder().res(list).build();
     }
 
-    /*查询班主任本班学生的成绩*/
+    /**查询班主任本班学生的成绩*/
     @ApiOperation(value = "根据教师id查询学生成绩", notes="用于测试接口")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "教师ID",required = true, dataType = "int"),
@@ -178,7 +178,7 @@ public class TeacherController {
 
     }
 
-    /*得到本班学生课程对应的学号和学年*/
+    /**得到本班学生课程对应的学号和学年*/
     @GetMapping("selectStuIdAndYearByTeacherId")
     public Result<List<StuCourseOfYearDTO>> selectStuIdAndYearByTeacherId( Integer id)
     {
@@ -186,7 +186,7 @@ public class TeacherController {
         return Result.<List<StuCourseOfYearDTO>>builder().res(list).build();
     }
 
-    /*根据学生id或姓名，和教师id，查询该学生每学年度的总分 text为学号或者学生姓名*/
+    /**根据学生id或姓名，和教师id，查询该学生每学年度的总分 text为学号或者学生姓名*/
     @GetMapping("selectSumCourseByYear")
     public Result<List<CourseAndYearsDTO>> selectCourseByYear(Integer teacherId,String text)
     {   List<CourseAndYearsDTO> list;
@@ -202,7 +202,7 @@ public class TeacherController {
         return Result.<List<CourseAndYearsDTO>>builder().res(list).build();
     }
 
-    /*得到本班学生个人课程对应的学号和学年*/
+    /**得到本班学生个人课程对应的学号和学年*/
     @GetMapping("getStuOfYear")
     public Result<List<StuCourseOfYearDTO>> selectStuIdAndYearByStuId(Integer studentId)
     {
@@ -210,7 +210,7 @@ public class TeacherController {
         return Result.<List<StuCourseOfYearDTO>>builder().res(list).build();
     }
 
-    /*根据学年统计各个分段学生成绩*/
+    /**根据学年统计各个分段学生成绩*/
     @GetMapping("Statistics")
     public Result statistics(Integer year,Integer id)
     {
