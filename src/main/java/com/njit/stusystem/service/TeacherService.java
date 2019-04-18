@@ -11,7 +11,9 @@ import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @Service
@@ -122,10 +124,13 @@ public class TeacherService {
         return messageMapper.selectUnReadCounts(id);
     }
 
-    public List<MessageDTO> selectMessageByTeacherId(Integer id)
+    public Map<String,List> selectMessageByTeacherId(Integer id)
     {
         messageMapper.updateStatusByUserId(id);
-        return messageMapper.selectByTeacherId(id);
+        Map<String,List> map=new HashMap();
+        List<MessageDTO> notificationList=messageMapper.selectByTeacherId(id,"notification");
+        map.put("notices",notificationList);
+        return map;
     }
 
     /*根据教师姓名查询教师信息*/

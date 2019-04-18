@@ -9,7 +9,6 @@ import com.njit.stusystem.service.StudentService;
 import com.njit.stusystem.service.TeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import javax.servlet.http.HttpSession;
 import java.util.Map;
 import java.util.concurrent.Executors;
@@ -20,6 +19,9 @@ import java.util.concurrent.TimeUnit;
  * @author ZJY
  * @version 1.0
  * @date 2019/4/15 17:38
+ *
+ * 登录控制类，前台代码打包到后台后，需在每个类的RequestMapping加上("/dev")
+ * 或者前台url统一删除dev
  */
 @RestController
 public class LoginController {

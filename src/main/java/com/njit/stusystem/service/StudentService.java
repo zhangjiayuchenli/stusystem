@@ -53,14 +53,7 @@ public class StudentService {
     }
 
     /**根据学生id查询消息*/
-    public List<MessageDTO> selectMessageByStuId(Integer id)
-    {
-        messageMapper.updateStatusByUserId(id);
-        return messageMapper.selectByStuId(id,"notification");
-    }
-
-    /**根据学生id查询消息*/
-    public Map<String,List> selectMessageByStuId2(Integer id)
+    public Map<String,List> selectMessageByStuId(Integer id)
     {
         messageMapper.updateStatusByUserId(id);
         List<MessageDTO> notificationList=messageMapper.selectByStuId(id,"notification");

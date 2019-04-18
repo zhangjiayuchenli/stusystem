@@ -23,10 +23,11 @@ public interface MessageMapper {
             "tb_teacher\n" +
             "WHERE\n" +
             "tb_teacher.id = tb_message.user_id AND\n" +
-            "tb_teacher.id = #{id}\n" +
+            "tb_teacher.id = #{id} AND\n" +
+            "tb_message.type = #{messageType}\n" +
             "ORDER BY\n" +
             "tb_message.datetime DESC")
-    List<MessageDTO> selectByTeacherId(@Param("id") Integer id);
+    List<MessageDTO> selectByTeacherId(@Param("id") Integer id,@Param("messageType") String type);
 
     /**根据学生id查询消息*/
     @Select("SELECT\n" +

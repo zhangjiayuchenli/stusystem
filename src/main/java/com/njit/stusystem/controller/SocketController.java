@@ -42,19 +42,17 @@ public class SocketController {
         String type=(String) session.getAttribute("type");
         if (teacher.equals(type))
         {
-            List<MessageDTO> list=teacherService.selectMessageByTeacherId(id);
-            return Result.<List<MessageDTO>>builder().res(list).build();
+            Map map=teacherService.selectMessageByTeacherId(id);
+            return Result.<Map>builder().res(map).build();
         }
         if (stu.equals(type))
         {
-            //List<MessageDTO> list=studentService.selectMessageByStuId(id);
-            Map list=studentService.selectMessageByStuId2(id);
-            //return Result.<List<MessageDTO>>builder().res(list).build();
-            return Result.<Map>builder().res(list).build();
+            Map map=studentService.selectMessageByStuId(id);
+            return Result.<Map>builder().res(map).build();
         }
         return Result.<List<MessageDTO>>builder().code(Result.FAILED_CODE).build();
     }
-    /*根据id获取未读消息数量*/
+    /**根据id获取未读消息数量*/
     @GetMapping("getUnReadCount")
     public Result getUnReadCount(HttpSession session)
     {

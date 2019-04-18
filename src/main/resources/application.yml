@@ -10,6 +10,9 @@ spring:
   devtools:
     restart:
       enabled: true
+  mvc:
+    view:
+       suffix: .html
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
     type: com.zaxxer.hikari.HikariDataSource
