@@ -69,6 +69,14 @@ public class TeacherController {
         return Result.builder().code(Result.SUCCESS_CODE).res("http://localhost:8080/image/"+fileName).build();
     }
 
+    /** 根据教师id向全班学生发送班级信息*/
+    @PostMapping("sendMessage")
+    public Result sendMessageToStu(@RequestBody Map<String,String> map,HttpSession session)
+    {
+        teacherService.sendMessageToStu(map.get("description"),(Integer) session.getAttribute("id"));
+        return Result.builder().code(Result.SUCCESS_CODE).build();
+    }
+
 
     /**根据教师id查询教师信息*/
     @ApiOperation(value = "根据ID查询教师信息",notes = "用于测试接口")
@@ -171,18 +179,18 @@ public class TeacherController {
             @ApiImplicitParam(name = "year", value = "学年",required = true, dataType = "int")
     })
     @GetMapping("selectCourseByYears")
-    public Result<List<StuAndCourseDTO>> selectCourseByYears(Integer year,Integer id)
+    public Result<List<StuAndCourseDTO>> selectCourseByYears(Integer year,HttpSession session)
     {
-        List<StuAndCourseDTO> list=teacherService.selectCourseByYears(year,id);
+        List<StuAndCourseDTO> list=teacherService.selectCourseByYears(year,(Integer)session.getAttribute("id"));
         return Result.<List<StuAndCourseDTO>>builder().res(list).build();
 
     }
 
     /**得到本班学生课程对应的学号和学年*/
     @GetMapping("selectStuIdAndYearByTeacherId")
-    public Result<List<StuCourseOfYearDTO>> selectStuIdAndYearByTeacherId( Integer id)
+    public Result<List<StuCourseOfYearDTO>> selectStuIdAndYearByTeacherId( HttpSession session)
     {
-        List<StuCourseOfYearDTO> list=teacherService.selectStuIdAndYearByTeacherId(id);
+        List<StuCourseOfYearDTO> list=teacherService.selectStuIdAndYearByTeacherId((Integer)session.getAttribute("id"));
         return Result.<List<StuCourseOfYearDTO>>builder().res(list).build();
     }
 
@@ -212,9 +220,9 @@ public class TeacherController {
 
     /**根据学年统计各个分段学生成绩*/
     @GetMapping("Statistics")
-    public Result statistics(Integer year,Integer id)
+    public Result statistics(Integer year,HttpSession session)
     {
-        List l =teacherService.Statistics(year, id);
+        List l =teacherService.Statistics(year, (Integer)session.getAttribute("id"));
 
         return Result.builder().res(l).build();
     }

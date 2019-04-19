@@ -48,6 +48,16 @@ public interface TeacherMapper {
             "tea.teacher_classname = #{classname}")
     int selectTeacherIdByClassName(@Param("classname") String classname);
 
+    /** 根据教师id查询所在班级的全部学生学号*/
+    @Select("SELECT\n" +
+            "tb_student.id\n" +
+            "FROM\n" +
+            "tb_teacher\n" +
+            "INNER JOIN tb_student ON tb_student.teacher_id = tb_teacher.id\n" +
+            "WHERE\n" +
+            "tb_teacher.id = #{id}")
+    List<Integer> selectStuIdByTeacherId(@Param("id") int id);
+
     long countByExample(TeacherExample example);
 
     int deleteByExample(TeacherExample example);

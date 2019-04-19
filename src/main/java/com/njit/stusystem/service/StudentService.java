@@ -25,7 +25,7 @@ public class StudentService {
 
     @Autowired
     private MessageMapper messageMapper;
-    /*根据学生id和学年获取学生成绩等信息*/
+    /**根据学生id和学年获取学生成绩等信息*/
     public StuAndCourseDTO selectCourseByStuIdAndYear( Integer id, Integer year)
     {
         return courseMapper.selectCourseByStuIdAndYear(id,year);

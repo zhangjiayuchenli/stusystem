@@ -5,15 +5,13 @@ import com.njit.stusystem.mapper.CourseMapper;
 import com.njit.stusystem.mapper.MessageMapper;
 import com.njit.stusystem.mapper.TeacherMapper;
 import com.njit.stusystem.model.Course;
+import com.njit.stusystem.model.Message;
 import com.njit.stusystem.model.Teacher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 @Service
@@ -28,7 +26,7 @@ public class TeacherService {
     @Autowired
     private MessageMapper messageMapper;
 
-    /*可选择的修改学生成绩*/
+    /**可选择的修改学生成绩*/
     public int updateStuCourse(Course record)
     {
         return courseMapper.updateByPrimaryKeySelective( record);
@@ -124,6 +122,7 @@ public class TeacherService {
         return messageMapper.selectUnReadCounts(id);
     }
 
+    /** 根据教师id查询该教师收到的信息*/
     public Map<String,List> selectMessageByTeacherId(Integer id)
     {
         messageMapper.updateStatusByUserId(id);
@@ -131,6 +130,19 @@ public class TeacherService {
         List<MessageDTO> notificationList=messageMapper.selectByTeacherId(id,"notification");
         map.put("notices",notificationList);
         return map;
+    }
+
+    /** 根据教师id向全班学生发送班级信息*/
+    public void sendMessageToStu(String message,Integer id)
+    {
+        for (int i:teacherMapper.selectStuIdByTeacherId(id)
+             ) {
+            Message record=new Message();
+            record.setAvatar("https://gw.alipayobjects.com/zos/rmsportal/ThXAXghbEsBCCSDihZxY.png")
+                    .setTitle(message).setType("message").setUserId(i).
+                    setDatetime(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+            messageMapper.insertSelective(record);
+        }
     }
 
     /*根据教师姓名查询教师信息*/

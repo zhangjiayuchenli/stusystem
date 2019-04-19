@@ -34,7 +34,7 @@ public class SocketController {
 
     String teacher="teacher";
     String stu="stu";
-    /*根据id获取消息*/
+    /**根据id获取消息*/
     @GetMapping("notices")
     public Result  getMessage(HttpSession session)
     {
