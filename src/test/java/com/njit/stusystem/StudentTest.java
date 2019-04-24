@@ -4,6 +4,7 @@ import com.njit.stusystem.dto.StudentDTO;
 import com.njit.stusystem.mapper.StudentMapper;
 import com.njit.stusystem.model.Student;
 import com.njit.stusystem.service.StudentService;
+import com.njit.stusystem.utils.MD5Util;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -22,11 +23,11 @@ public class StudentTest extends BaseTest {
     public void testInsert()
     {
         Student student=new Student();
-        for (int i=0;i<30;i++) {
+        for (int i=0;i<3;i++) {
             Date date = new Date();
             SimpleDateFormat temp = new SimpleDateFormat("yyyy-MM-dd");
             student.setStudentName(RandomValue.getChineseName());
-            student.setStudentPassword("123456");
+            student.setStudentPassword(MD5Util.MD5("123"));
             student.setStudentBirthday(temp.format(date));
             student.setStudentPhone(RandomValue.getTel());
             student.setStudentAddress(RandomValue.getRoad());
@@ -41,5 +42,12 @@ public class StudentTest extends BaseTest {
     {
         StudentDTO studentDTO=studentService.selectByUsernameAndPassword(202151336,"11");
         System.out.println(studentDTO.getStudentName());
+    }
+
+    @Test
+    public void selectById()
+    {
+        StudentDTO studentDTO=studentService.selectById(202151336);
+        System.out.println(studentDTO.toString());
     }
 }

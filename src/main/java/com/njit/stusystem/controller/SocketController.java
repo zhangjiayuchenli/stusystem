@@ -3,6 +3,7 @@ package com.njit.stusystem.controller;
 import com.njit.stusystem.dto.MessageDTO;
 import com.njit.stusystem.dto.Result;
 import com.njit.stusystem.dto.UnReadCountsDTO;
+import com.njit.stusystem.service.MessageService;
 import com.njit.stusystem.service.StudentService;
 import com.njit.stusystem.service.TeacherService;
 import com.njit.stusystem.socket.MyWebSocket;
@@ -31,6 +32,9 @@ public class SocketController {
 
     @Autowired
     private StudentService studentService;
+
+    @Autowired
+    private MessageService messageService;
 
     String teacher="teacher";
     String stu="stu";
@@ -70,6 +74,32 @@ public class SocketController {
         }
 
         return Result.<UnReadCountsDTO>builder().code(Result.FAILED_CODE).build();
+    }
+
+    /**根据用户id和消息类别删除消息*/
+    @DeleteMapping("clearNotices")
+    public Result clearNoticesById(@RequestBody Map<String,String> map,HttpSession session)
+    {
+        System.out.println("111111111");
+        System.out.println(map.get("type"));
+        System.out.println("111111111");
+        int id=(Integer)session.getAttribute("id");
+        String notification="教务通知";
+        String message="班级通知";
+        if(notification.equals(map.get("type")))
+        {
+            String type="notification";
+            messageService.clearNoticesByIdAndType(id,type);
+            return Result.builder().code(Result.SUCCESS_CODE).build();
+        }
+        else if( message.equals(map.get("type")))
+        {
+            String type="message";
+            messageService.clearNoticesByIdAndType(id,type);
+            return Result.builder().code(Result.SUCCESS_CODE).build();
+        }
+
+        return Result.builder().code(Result.FAILED_CODE).build();
     }
 /*
     @PostMapping("admin/sendMessage")

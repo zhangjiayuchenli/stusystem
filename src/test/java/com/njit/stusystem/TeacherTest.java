@@ -3,6 +3,7 @@ package com.njit.stusystem;
 import com.njit.stusystem.mapper.TeacherMapper;
 import com.njit.stusystem.model.Teacher;
 import com.njit.stusystem.service.TeacherService;
+import com.njit.stusystem.utils.MD5Util;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.text.ParseException;
@@ -34,11 +35,11 @@ public class TeacherTest extends BaseTest {
         Teacher teacher=new Teacher();
 
 
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < 20; i++) {
             Date date=new Date();   //这里的时util包下的
             SimpleDateFormat temp=new SimpleDateFormat("yyyy-MM-dd");  //这是24时
             teacher.setTeacherName(RandomValue.getChineseName());
-            teacher.setTeacherPassword("123456");
+            teacher.setTeacherPassword(MD5Util.MD5("123"));
             teacher.setTeacherSex("男");
             teacher.setTeacherBrithday(temp.parse(temp.format(date)));
             teacher.setTeacherAddress(RandomValue.getRoad());

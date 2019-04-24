@@ -5,6 +5,8 @@ import com.njit.stusystem.dto.UnReadCountsDTO;
 import com.njit.stusystem.model.Message;
 import com.njit.stusystem.model.MessageExample;
 import java.util.List;
+
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
@@ -74,6 +76,10 @@ public interface MessageMapper {
             "tb_message.status = 1 AND\n" +
             "tb_student.id = tb_message.user_id")
     UnReadCountsDTO selectUnReadCountsByStuId(@Param("id") Integer id);
+
+    /**根据用户id和消息类别删除消息*/
+    @Delete("DELETE FROM tb_message WHERE tb_message.user_id=#{id} AND tb_message.type=#{type}")
+    int clearNoticesByIdAndType(@Param("id")Integer id,@Param("type")String type);
 
     long countByExample(MessageExample example);
 

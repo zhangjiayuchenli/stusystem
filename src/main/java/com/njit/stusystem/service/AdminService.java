@@ -76,4 +76,9 @@ public class AdminService {
         sendMessageToTeacher(message);
         sendMessageToStu(message);
     }
+
+    public Admin selectById(Integer id)
+    {
+        return adminMapper.selectByPrimaryKey(id);
+    }
 }

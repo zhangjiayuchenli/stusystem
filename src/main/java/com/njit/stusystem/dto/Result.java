@@ -14,5 +14,6 @@ public class Result<T> {
     private int code;
     private T res;
     private String error;
+    private String token;
     private String trace;
 }

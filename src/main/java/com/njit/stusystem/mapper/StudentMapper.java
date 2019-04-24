@@ -39,6 +39,10 @@ public interface StudentMapper {
     @Select("SELECT tb_student.id from tb_student")
     List<Integer> selectId();
 
+    /**根据学生id查询学生信息*/
+    @Select("select * from tb_student where tb_student.id=#{id}")
+    StudentDTO selectById(@Param("id") Integer id);
+
     long countByExample(StudentExample example);
 
     int deleteByExample(StudentExample example);

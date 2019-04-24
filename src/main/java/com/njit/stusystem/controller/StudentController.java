@@ -4,6 +4,7 @@ import com.njit.stusystem.dto.*;
 import com.njit.stusystem.mapper.TeacherMapper;
 import com.njit.stusystem.model.Student;
 import com.njit.stusystem.service.StudentService;
+import com.njit.stusystem.utils.MD5Util;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -79,6 +80,7 @@ public class StudentController {
     @PutMapping("updateStu")
     public Result<List<TeaAndStuDTO>> updateStu(@RequestBody Student student,HttpSession session){
         student.setId((Integer)session.getAttribute("id"));
+        student.setStudentPassword(MD5Util.MD5(student.getStudentPassword()));
         if(student.getTeacherId()!=null)
         {
             student.setTeacherId(student.getTeacherId());

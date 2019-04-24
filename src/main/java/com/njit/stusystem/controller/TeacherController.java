@@ -4,6 +4,7 @@ import com.njit.stusystem.dto.*;
 import com.njit.stusystem.model.Course;
 import com.njit.stusystem.model.Teacher;
 import com.njit.stusystem.service.TeacherService;
+import com.njit.stusystem.utils.MD5Util;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -103,6 +104,7 @@ public class TeacherController {
     public Result<List<TeacherDTO>>  updateTeacher(@RequestBody Teacher teacher,HttpSession session) throws ParseException
     {
         teacher.setId((Integer)session.getAttribute("id"));
+        teacher.setTeacherPassword(MD5Util.MD5(teacher.getTeacherPassword()));
         teacherService.updateByPrimaryKeySelective(teacher);
         List<TeacherDTO> list=teacherService.selectAll();
         return Result.<List<TeacherDTO>>builder().res(list).build();
@@ -196,8 +198,9 @@ public class TeacherController {
 
     /**根据学生id或姓名，和教师id，查询该学生每学年度的总分 text为学号或者学生姓名*/
     @GetMapping("selectSumCourseByYear")
-    public Result<List<CourseAndYearsDTO>> selectCourseByYear(Integer teacherId,String text)
+    public Result<List<CourseAndYearsDTO>> selectCourseByYear(String text,HttpSession session)
     {   List<CourseAndYearsDTO> list;
+        int teacherId=(Integer)session.getAttribute("id");
         try{
             int i = Integer.parseInt(text);
             list = teacherService.selectStuCourse(teacherId,i,null);

@@ -5,6 +5,7 @@ import com.njit.stusystem.dto.AdminDTO;
 import com.njit.stusystem.dto.Result;
 import com.njit.stusystem.model.Admin;
 import com.njit.stusystem.service.AdminService;
+import com.njit.stusystem.utils.MD5Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,6 +29,7 @@ public class AdminController {
     public Result<AdminDTO> updateAdmin(@RequestBody Admin admin, HttpSession session)
     {
         admin.setId((Integer)session.getAttribute("id"));
+        admin.setPassword(MD5Util.MD5(admin.getPassword()));
         adminService.updateByPrimaryKey(admin);
         return Result.<AdminDTO>builder().code(Result.SUCCESS_CODE).build();
     }

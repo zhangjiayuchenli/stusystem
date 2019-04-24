@@ -75,6 +75,12 @@ public class StudentService {
         return studentMapper.selectAll();
     }
 
+    /**根据学生id查询学生信息*/
+    public StudentDTO selectById(int id)
+    {
+        return studentMapper.selectById(id);
+    }
+
     /*新增学生*/
     public int insertSelective(Student record)
     {

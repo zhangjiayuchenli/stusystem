@@ -1,12 +1,11 @@
 package com.njit.stusystem.controller;
 
+import com.njit.stusystem.annotation.LoginToken;
 import com.njit.stusystem.dto.*;
 import com.njit.stusystem.model.Student;
 import com.njit.stusystem.model.Teacher;
-import com.njit.stusystem.service.AdminService;
-import com.njit.stusystem.service.MailSendService;
-import com.njit.stusystem.service.StudentService;
-import com.njit.stusystem.service.TeacherService;
+import com.njit.stusystem.service.*;
+import com.njit.stusystem.utils.MD5Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
@@ -37,7 +36,11 @@ public class LoginController {
     @Autowired
     private TeacherService teacherService;
 
+    @Autowired
+    private TokenService tokenService;
+
     /**退出登录，清除session*/
+    @LoginToken
     @GetMapping("/logout")
     public void clearSession(HttpSession session)
     {
@@ -45,6 +48,34 @@ public class LoginController {
         session.removeAttribute("type");
     }
 
+    /**
+     * 获取当前用户信息
+     */
+    @GetMapping("/fetchCurrentUser")
+    public Result fetchCurrentUser(HttpSession session)
+    {
+        String teacher="teacher";
+        String stu="stu";
+        String admin="admin";
+        Integer id=(Integer)session.getAttribute("id");
+        System.out.println(id);
+        String type=(String)session.getAttribute("type");
+        if (teacher.equals(type))
+        {
+            TeacherDTO teacherDTO=teacherService.selectById(id);
+            return Result.<TeacherDTO>builder().code(Result.SUCCESS_CODE).res(teacherDTO).build();
+        }
+        else if(stu.equals(type))
+        {
+            StudentDTO studentDTO=studentService.selectById(id);
+            return Result.<StudentDTO>builder().code(Result.SUCCESS_CODE).res(studentDTO).build();
+        }
+        else if(admin.equals(type))
+        {
+
+        }
+        return Result.builder().code(Result.FAILED_CODE).build();
+    }
 
     /** 登录验证，先判断用户类型，再进行用户名和密码的确认
        type=admin为管理员，type=teacher为教师，type=stu为学生用户 */
@@ -53,34 +84,34 @@ public class LoginController {
         String teacher="teacher";
         String stu="stu";
         String admin="admin";
-        int userId = user.getId();
+        int userId = Integer.parseInt(user.getId());
         String password=user.getPassword();
         // 前台已经做了强制输入用户名和密码处理，后台不必判断id和password为空的情况
         if(admin.equals(user.getTypes()))
         {
-            AdminDTO adminDTO=adminService.selectByUsernameAndPassword(userId,password);
-            if (adminDTO!=null&&userId==adminDTO.getId() && password.equals(adminDTO.getPassword())) {
+            AdminDTO adminDTO=adminService.selectByUsernameAndPassword(userId,MD5Util.MD5(password));
+            if (adminDTO!=null&&userId==adminDTO.getId() && MD5Util.MD5(password).equals(adminDTO.getPassword())) {
                 session.setAttribute("id",userId);
                 session.setAttribute("type",user.getTypes());
-                return Result.<AdminDTO>builder().code(Result.SUCCESS_CODE).build();
+                return Result.<String>builder().code(Result.SUCCESS_CODE).res(tokenService.getToken(user)).build();
             }
         }
         else if (teacher.equals(user.getTypes()))
         {
-            TeacherDTO teacherDTO=teacherService.selectByUsernameAndPassword(userId, password);
-            if (teacherDTO!=null && userId==teacherDTO.getId() && password.equals(teacherDTO.getTeacherPassword())) {
+            TeacherDTO teacherDTO=teacherService.selectByUsernameAndPassword(userId, MD5Util.MD5(password));
+            if (teacherDTO!=null && userId==teacherDTO.getId() && MD5Util.MD5(password).equals(teacherDTO.getTeacherPassword())) {
                 session.setAttribute("id",userId);
                 session.setAttribute("type",user.getTypes());
-                return Result.<TeacherDTO>builder().code(Result.SUCCESS_CODE).res(teacherDTO).build();
+                return Result.<TeacherDTO>builder().code(Result.SUCCESS_CODE).res(teacherDTO).token(tokenService.getToken(user)).build();
             }
         }
         else if (stu.equals(user.getTypes()))
         {
-            StudentDTO studentDTO=studentService.selectByUsernameAndPassword(userId,password);
-            if (studentDTO!=null &&userId==studentDTO.getId() && password.equals(studentDTO.getStudentPassword())) {
+            StudentDTO studentDTO=studentService.selectByUsernameAndPassword(userId,MD5Util.MD5(password));
+            if (studentDTO!=null &&userId==studentDTO.getId() && MD5Util.MD5(password).equals(studentDTO.getStudentPassword())) {
                 session.setAttribute("id",userId);
                 session.setAttribute("type",user.getTypes());
-                return Result.<StudentDTO>builder().code(Result.SUCCESS_CODE).res(studentDTO).build();
+                return Result.<StudentDTO>builder().code(Result.SUCCESS_CODE).res(studentDTO).token(tokenService.getToken(user)).build();
             }
         }
         return Result.builder().code(Result.FAILED_CODE).build();
@@ -146,7 +177,7 @@ public class LoginController {
             {
                 Student student=new Student();
                 student.setId(studentService.selectByEmail(map.get("email")).getId());
-                student.setStudentPassword(map.get("password"));
+                student.setStudentPassword(MD5Util.MD5(map.get("password")));
                 studentService.updateByPrimaryKeySelective(student);
                 return Result.builder().code(Result.SUCCESS_CODE).build();
             }
