@@ -9,6 +9,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,6 +26,7 @@ import static com.njit.stusystem.dto.Result.*;
  * @version 1.0
  * @date 2019/4/15 17:38
  */
+@Slf4j
 @RestController
 @RequestMapping("teacher/")
 @Api("相关api")
@@ -99,15 +101,31 @@ public class TeacherController {
         return Result.<TeacherDTO>builder().code(SUCCESS_CODE).res(list2).build();
     }
 
-    /**根据教师id修改教师信息*/
+    /**教师修改个人的密码,需要先验证旧密码是否正确*/
+    @PutMapping("updateTeacherPassword")
+    public Result  updateTeacherPassword(@RequestBody Map<String,String>map,HttpSession session) throws ParseException
+    {
+        Teacher teacher=new Teacher();
+        int id=(Integer)session.getAttribute("id");
+        TeacherDTO teacherDTO=teacherService.selectById(id);
+        if (teacherDTO.getTeacherPassword().equals(MD5Util.MD5(map.get("password"))))
+        {
+            teacher.setId(id);
+            teacher.setTeacherPassword(MD5Util.MD5(map.get("teacherPassword")));
+            log.info(teacher.toString());
+            teacherService.updateByPrimaryKeySelective(teacher);
+            return Result.builder().code(Result.SUCCESS_CODE).build();
+        }
+        return Result.builder().code(Result.FAILED_CODE).build();
+    }
+
+    /**教师修改个人信息*/
     @PutMapping("updateTeacher")
-    public Result<List<TeacherDTO>>  updateTeacher(@RequestBody Teacher teacher,HttpSession session) throws ParseException
+    public Result updateTeacher(@RequestBody Teacher teacher,HttpSession session)
     {
         teacher.setId((Integer)session.getAttribute("id"));
-        teacher.setTeacherPassword(MD5Util.MD5(teacher.getTeacherPassword()));
         teacherService.updateByPrimaryKeySelective(teacher);
-        List<TeacherDTO> list=teacherService.selectAll();
-        return Result.<List<TeacherDTO>>builder().res(list).build();
+        return Result.builder().code(Result.SUCCESS_CODE).build();
     }
 
     /**管理员根据教师id修改教师信息*/

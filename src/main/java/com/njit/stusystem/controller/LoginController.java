@@ -2,6 +2,7 @@ package com.njit.stusystem.controller;
 
 import com.njit.stusystem.annotation.LoginToken;
 import com.njit.stusystem.dto.*;
+import com.njit.stusystem.model.Admin;
 import com.njit.stusystem.model.Student;
 import com.njit.stusystem.model.Teacher;
 import com.njit.stusystem.service.*;
@@ -42,23 +43,24 @@ public class LoginController {
     /**退出登录，清除session*/
     @LoginToken
     @GetMapping("/logout")
-    public void clearSession(HttpSession session)
+    public Result clearSession(HttpSession session)
     {
         session.removeAttribute("id");
         session.removeAttribute("type");
+        return Result.builder().code(Result.SUCCESS_CODE).build();
     }
 
-    /**
-     * 获取当前用户信息
-     */
-    @GetMapping("/fetchCurrentUser")
-    public Result fetchCurrentUser(HttpSession session)
+    @LoginToken
+    @GetMapping("/fetchCurrentUserByToken")
+    public Result fetchCurrentUserByToken(HttpSession session)
     {
         String teacher="teacher";
         String stu="stu";
         String admin="admin";
         Integer id=(Integer)session.getAttribute("id");
+        System.out.println("222222222222222222222");
         System.out.println(id);
+        System.out.println("222222222222222222222");
         String type=(String)session.getAttribute("type");
         if (teacher.equals(type))
         {
@@ -73,6 +75,34 @@ public class LoginController {
         else if(admin.equals(type))
         {
 
+        }
+        return Result.builder().code(Result.FAILED_CODE).build();
+    }
+    /**
+     * 获取当前用户信息
+     */
+    @GetMapping("/fetchCurrentUser")
+    public Result fetchCurrentUser(HttpSession session)
+    {
+        String teacher="teacher";
+        String stu="stu";
+        String admin="admin";
+        Integer id=(Integer)session.getAttribute("id");
+        String type=(String)session.getAttribute("type");
+        if (teacher.equals(type))
+        {
+            TeacherDTO teacherDTO=teacherService.selectById(id);
+            return Result.<TeacherDTO>builder().code(Result.SUCCESS_CODE).res(teacherDTO).build();
+        }
+        else if(stu.equals(type))
+        {
+            StudentDTO studentDTO=studentService.selectById(id);
+            return Result.<StudentDTO>builder().code(Result.SUCCESS_CODE).res(studentDTO).build();
+        }
+        else if(admin.equals(type))
+        {
+            Admin admin1=adminService.selectById(id);
+            return Result.<Admin>builder().code(Result.SUCCESS_CODE).res(admin1).build();
         }
         return Result.builder().code(Result.FAILED_CODE).build();
     }
@@ -162,14 +192,13 @@ public class LoginController {
     public Result updatePassword(@RequestBody Map<String,String> map,HttpSession session)
     {
         String code=(String) session.getAttribute("verifyCode");
-        System.out.println(code);
         if (code!=null&&code.equals(map.get("captcha")))
         {
             if (teacherService.selectEmail(map.get("email"))!=null)
             {
                 Teacher teacher=new Teacher();
                 teacher.setId(teacherService.selectEmail(map.get("email")).getId());
-                teacher.setTeacherPassword(map.get("password"));
+                teacher.setTeacherPassword(MD5Util.MD5(map.get("password")));
                 teacherService.updateByPrimaryKeySelective(teacher);
                 return Result.builder().code(Result.SUCCESS_CODE).build();
             }

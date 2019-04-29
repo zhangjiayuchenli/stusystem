@@ -90,6 +90,24 @@ public class StudentController {
         return Result.<List<TeaAndStuDTO>>builder().res(list).build();
     }
 
+    /**学生修改个人密码*/
+    @PutMapping("updateStuPassword")
+    public Result updateStuPassword(@RequestBody Map<String,String> map,HttpSession session)
+    {
+        Student student=new Student();
+        int id=(Integer)session.getAttribute("id");
+        StudentDTO studentDTO=studentService.selectById(id);
+        if(studentDTO.getStudentPassword().equals(MD5Util.MD5(map.get("password"))))
+        {
+            student.setId(id);
+            student.setStudentPassword(MD5Util.MD5(map.get("studentPassword")));
+            studentService.updateByPrimaryKeySelective(student);
+            return Result.builder().code(Result.SUCCESS_CODE).build();
+
+        }
+        return Result.builder().code(Result.FAILED_CODE).build();
+    }
+
     @PutMapping("adminUpdateStu")
     public Result<List<TeaAndStuDTO>> adminUpdateStu(@RequestBody StudentDTOO studentDTO){
 

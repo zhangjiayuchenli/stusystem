@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
  * @version 1.0
  * @date 2019/4/22 15:44
  */
-@Service("TokenService")
+@Service
 public class TokenService {
     public String getToken(UserDTO user) {
         String token="";

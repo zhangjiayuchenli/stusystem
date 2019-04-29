@@ -1,6 +1,7 @@
 package com.njit.stusystem.interceptor;
 
 import com.alibaba.fastjson.JSONObject;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @version 1.0
  * @date 2019/4/22 16:11
  */
-@ControllerAdvice
+/*@ControllerAdvice
 public class GloablExceptionHandler {
     @ResponseBody
     @ExceptionHandler(Exception.class)
@@ -23,4 +24,4 @@ public class GloablExceptionHandler {
         jsonObject.put("message", msg);
         return jsonObject;
     }
-}
+}*/
