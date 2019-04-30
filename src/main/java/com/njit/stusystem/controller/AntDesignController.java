@@ -3,6 +3,7 @@ package com.njit.stusystem.controller;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author ZJY
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  *
  * 使用 browserHistory ，创建一个 controller ，暂时办法
  */
-@Controller
+@RestController
 public class AntDesignController implements ErrorController {
     @Override
     public String getErrorPath(){

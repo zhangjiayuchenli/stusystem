@@ -67,7 +67,7 @@ public class TeacherService {
     {
         CourseDTO courseDTO=new CourseDTO();
         List list=new ArrayList();
-        courseDTO.setGrade("差").setNumbers(courseMapper.selectCount(0,320,year,id));
+        courseDTO.setGrade("差(总分小于320分)").setNumbers(courseMapper.selectCount(0,320,year,id));
 
         CourseDTO courseDTO2=new CourseDTO();
         courseDTO2.setGrade("较差").setNumbers(courseMapper.selectCount(320,420,year,id));
