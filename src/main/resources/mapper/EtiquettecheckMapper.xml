@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.njit.stusystem.mapper.EtiquettecheckMapper">
+  <resultMap id="BaseResultMap" type="com.njit.stusystem.model.Etiquettecheck">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="school_year" jdbcType="VARCHAR" property="schoolYear" />
+    <result column="week" jdbcType="VARCHAR" property="week" />
+    <result column="create_time" jdbcType="VARCHAR" property="createTime" />
+    <result column="stu_id" jdbcType="INTEGER" property="stuId" />
+    <result column="respect" jdbcType="INTEGER" property="respect" />
+    <result column="keep_rules" jdbcType="INTEGER" property="keepRules" />
+    <result column="civilized" jdbcType="INTEGER" property="civilized" />
+    <result column="health" jdbcType="INTEGER" property="health" />
+    <result column="flag" jdbcType="INTEGER" property="flag" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, school_year, week, create_time, stu_id, respect, keep_rules, civilized, health, 
+    flag
+  </sql>
+  <select id="selectByExample" parameterType="com.njit.stusystem.model.EtiquettecheckExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_etiquettecheck
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="limit != null">
+      <if test="offset != null">
+        limit ${offset}, ${limit}
+      </if>
+      <if test="offset == null">
+        limit ${limit}
+      </if>
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_etiquettecheck
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tb_etiquettecheck
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.njit.stusystem.model.EtiquettecheckExample">
+    delete from tb_etiquettecheck
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.njit.stusystem.model.Etiquettecheck" useGeneratedKeys="true">
+    insert into tb_etiquettecheck (school_year, week, create_time, 
+      stu_id, respect, keep_rules, 
+      civilized, health, flag
+      )
+    values (#{schoolYear,jdbcType=VARCHAR}, #{week,jdbcType=VARCHAR}, #{createTime,jdbcType=VARCHAR}, 
+      #{stuId,jdbcType=INTEGER}, #{respect,jdbcType=INTEGER}, #{keepRules,jdbcType=INTEGER}, 
+      #{civilized,jdbcType=INTEGER}, #{health,jdbcType=INTEGER}, #{flag,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.njit.stusystem.model.Etiquettecheck" useGeneratedKeys="true">
+    insert into tb_etiquettecheck
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="schoolYear != null">
+        school_year,
+      </if>
+      <if test="week != null">
+        week,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="stuId != null">
+        stu_id,
+      </if>
+      <if test="respect != null">
+        respect,
+      </if>
+      <if test="keepRules != null">
+        keep_rules,
+      </if>
+      <if test="civilized != null">
+        civilized,
+      </if>
+      <if test="health != null">
+        health,
+      </if>
+      <if test="flag != null">
+        flag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="schoolYear != null">
+        #{schoolYear,jdbcType=VARCHAR},
+      </if>
+      <if test="week != null">
+        #{week,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="stuId != null">
+        #{stuId,jdbcType=INTEGER},
+      </if>
+      <if test="respect != null">
+        #{respect,jdbcType=INTEGER},
+      </if>
+      <if test="keepRules != null">
+        #{keepRules,jdbcType=INTEGER},
+      </if>
+      <if test="civilized != null">
+        #{civilized,jdbcType=INTEGER},
+      </if>
+      <if test="health != null">
+        #{health,jdbcType=INTEGER},
+      </if>
+      <if test="flag != null">
+        #{flag,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.njit.stusystem.model.EtiquettecheckExample" resultType="java.lang.Long">
+    select count(*) from tb_etiquettecheck
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tb_etiquettecheck
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.schoolYear != null">
+        school_year = #{record.schoolYear,jdbcType=VARCHAR},
+      </if>
+      <if test="record.week != null">
+        week = #{record.week,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.stuId != null">
+        stu_id = #{record.stuId,jdbcType=INTEGER},
+      </if>
+      <if test="record.respect != null">
+        respect = #{record.respect,jdbcType=INTEGER},
+      </if>
+      <if test="record.keepRules != null">
+        keep_rules = #{record.keepRules,jdbcType=INTEGER},
+      </if>
+      <if test="record.civilized != null">
+        civilized = #{record.civilized,jdbcType=INTEGER},
+      </if>
+      <if test="record.health != null">
+        health = #{record.health,jdbcType=INTEGER},
+      </if>
+      <if test="record.flag != null">
+        flag = #{record.flag,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tb_etiquettecheck
+    set id = #{record.id,jdbcType=INTEGER},
+      school_year = #{record.schoolYear,jdbcType=VARCHAR},
+      week = #{record.week,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=VARCHAR},
+      stu_id = #{record.stuId,jdbcType=INTEGER},
+      respect = #{record.respect,jdbcType=INTEGER},
+      keep_rules = #{record.keepRules,jdbcType=INTEGER},
+      civilized = #{record.civilized,jdbcType=INTEGER},
+      health = #{record.health,jdbcType=INTEGER},
+      flag = #{record.flag,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.njit.stusystem.model.Etiquettecheck">
+    update tb_etiquettecheck
+    <set>
+      <if test="schoolYear != null">
+        school_year = #{schoolYear,jdbcType=VARCHAR},
+      </if>
+      <if test="week != null">
+        week = #{week,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="stuId != null">
+        stu_id = #{stuId,jdbcType=INTEGER},
+      </if>
+      <if test="respect != null">
+        respect = #{respect,jdbcType=INTEGER},
+      </if>
+      <if test="keepRules != null">
+        keep_rules = #{keepRules,jdbcType=INTEGER},
+      </if>
+      <if test="civilized != null">
+        civilized = #{civilized,jdbcType=INTEGER},
+      </if>
+      <if test="health != null">
+        health = #{health,jdbcType=INTEGER},
+      </if>
+      <if test="flag != null">
+        flag = #{flag,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.njit.stusystem.model.Etiquettecheck">
+    update tb_etiquettecheck
+    set school_year = #{schoolYear,jdbcType=VARCHAR},
+      week = #{week,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=VARCHAR},
+      stu_id = #{stuId,jdbcType=INTEGER},
+      respect = #{respect,jdbcType=INTEGER},
+      keep_rules = #{keepRules,jdbcType=INTEGER},
+      civilized = #{civilized,jdbcType=INTEGER},
+      health = #{health,jdbcType=INTEGER},
+      flag = #{flag,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

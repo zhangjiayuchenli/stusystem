@@ -23,11 +23,7 @@ public class TeacherTest extends BaseTest {
         teacherMapper.selectByPrimaryKey(26);
     }
 
-    @Test
-    public void testSelest()
-    {
 
-    }
 
     @Test
     public void testInsert() throws ParseException

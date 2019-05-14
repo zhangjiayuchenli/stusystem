@@ -49,8 +49,6 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
         // 如果不是映射到方法直接通过
         log.info(token);
         if (!(object instanceof HandlerMethod)) {
-
-
             log.info("1");
             return true;
         }

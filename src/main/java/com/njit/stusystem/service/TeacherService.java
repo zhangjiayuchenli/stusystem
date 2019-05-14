@@ -1,6 +1,7 @@
 package com.njit.stusystem.service;
 
 import com.njit.stusystem.dto.*;
+import com.njit.stusystem.mapper.ClassroomcheckMapper;
 import com.njit.stusystem.mapper.CourseMapper;
 import com.njit.stusystem.mapper.MessageMapper;
 import com.njit.stusystem.mapper.TeacherMapper;
@@ -26,6 +27,9 @@ public class TeacherService {
     @Autowired
     private MessageMapper messageMapper;
 
+    @Autowired
+    private ClassroomcheckMapper classroomcheckMapper;
+
     /**可选择的修改学生成绩*/
     public int updateStuCourse(Course record)
     {
@@ -44,6 +48,8 @@ public class TeacherService {
         return courseMapper.selectStuIdAndYearByStuId(studentId);
     }
 
+
+
     /*删除学生成绩*/
     public int deleteStuAndCourse(Integer id)
     {
@@ -61,6 +67,8 @@ public class TeacherService {
     {
         return courseMapper.selectCourseByYears(year,id);
     }
+
+
 
     /*统计各个分段学生成绩*/
     public List Statistics(Integer year,Integer id)

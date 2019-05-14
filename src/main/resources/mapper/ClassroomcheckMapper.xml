@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.njit.stusystem.mapper.ClassroomcheckMapper">
+  <resultMap id="BaseResultMap" type="com.njit.stusystem.model.Classroomcheck">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="school_year" jdbcType="VARCHAR" property="schoolYear" />
+    <result column="week" jdbcType="VARCHAR" property="week" />
+    <result column="creat_time" jdbcType="VARCHAR" property="creatTime" />
+    <result column="stu_id" jdbcType="INTEGER" property="stuId" />
+    <result column="positive_degree" jdbcType="INTEGER" property="positiveDegree" />
+    <result column="later" jdbcType="INTEGER" property="later" />
+    <result column="work" jdbcType="INTEGER" property="work" />
+    <result column="help_classmates" jdbcType="INTEGER" property="helpClassmates" />
+    <result column="discussion_degree" jdbcType="INTEGER" property="discussionDegree" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, school_year, week, creat_time, stu_id, positive_degree, later, `work`, help_classmates, 
+    discussion_degree
+  </sql>
+  <select id="selectByExample" parameterType="com.njit.stusystem.model.ClassroomcheckExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_classroomcheck
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="limit != null">
+      <if test="offset != null">
+        limit ${offset}, ${limit}
+      </if>
+      <if test="offset == null">
+        limit ${limit}
+      </if>
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_classroomcheck
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tb_classroomcheck
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.njit.stusystem.model.ClassroomcheckExample">
+    delete from tb_classroomcheck
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.njit.stusystem.model.Classroomcheck" useGeneratedKeys="true">
+    insert into tb_classroomcheck (school_year, week, creat_time, 
+      stu_id, positive_degree, later, 
+      `work`, help_classmates, discussion_degree
+      )
+    values (#{schoolYear,jdbcType=VARCHAR}, #{week,jdbcType=VARCHAR}, #{creatTime,jdbcType=VARCHAR}, 
+      #{stuId,jdbcType=INTEGER}, #{positiveDegree,jdbcType=INTEGER}, #{later,jdbcType=INTEGER}, 
+      #{work,jdbcType=INTEGER}, #{helpClassmates,jdbcType=INTEGER}, #{discussionDegree,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.njit.stusystem.model.Classroomcheck" useGeneratedKeys="true">
+    insert into tb_classroomcheck
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="schoolYear != null">
+        school_year,
+      </if>
+      <if test="week != null">
+        week,
+      </if>
+      <if test="creatTime != null">
+        creat_time,
+      </if>
+      <if test="stuId != null">
+        stu_id,
+      </if>
+      <if test="positiveDegree != null">
+        positive_degree,
+      </if>
+      <if test="later != null">
+        later,
+      </if>
+      <if test="work != null">
+        `work`,
+      </if>
+      <if test="helpClassmates != null">
+        help_classmates,
+      </if>
+      <if test="discussionDegree != null">
+        discussion_degree,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="schoolYear != null">
+        #{schoolYear,jdbcType=VARCHAR},
+      </if>
+      <if test="week != null">
+        #{week,jdbcType=VARCHAR},
+      </if>
+      <if test="creatTime != null">
+        #{creatTime,jdbcType=VARCHAR},
+      </if>
+      <if test="stuId != null">
+        #{stuId,jdbcType=INTEGER},
+      </if>
+      <if test="positiveDegree != null">
+        #{positiveDegree,jdbcType=INTEGER},
+      </if>
+      <if test="later != null">
+        #{later,jdbcType=INTEGER},
+      </if>
+      <if test="work != null">
+        #{work,jdbcType=INTEGER},
+      </if>
+      <if test="helpClassmates != null">
+        #{helpClassmates,jdbcType=INTEGER},
+      </if>
+      <if test="discussionDegree != null">
+        #{discussionDegree,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.njit.stusystem.model.ClassroomcheckExample" resultType="java.lang.Long">
+    select count(*) from tb_classroomcheck
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tb_classroomcheck
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.schoolYear != null">
+        school_year = #{record.schoolYear,jdbcType=VARCHAR},
+      </if>
+      <if test="record.week != null">
+        week = #{record.week,jdbcType=VARCHAR},
+      </if>
+      <if test="record.creatTime != null">
+        creat_time = #{record.creatTime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.stuId != null">
+        stu_id = #{record.stuId,jdbcType=INTEGER},
+      </if>
+      <if test="record.positiveDegree != null">
+        positive_degree = #{record.positiveDegree,jdbcType=INTEGER},
+      </if>
+      <if test="record.later != null">
+        later = #{record.later,jdbcType=INTEGER},
+      </if>
+      <if test="record.work != null">
+        `work` = #{record.work,jdbcType=INTEGER},
+      </if>
+      <if test="record.helpClassmates != null">
+        help_classmates = #{record.helpClassmates,jdbcType=INTEGER},
+      </if>
+      <if test="record.discussionDegree != null">
+        discussion_degree = #{record.discussionDegree,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tb_classroomcheck
+    set id = #{record.id,jdbcType=INTEGER},
+      school_year = #{record.schoolYear,jdbcType=VARCHAR},
+      week = #{record.week,jdbcType=VARCHAR},
+      creat_time = #{record.creatTime,jdbcType=VARCHAR},
+      stu_id = #{record.stuId,jdbcType=INTEGER},
+      positive_degree = #{record.positiveDegree,jdbcType=INTEGER},
+      later = #{record.later,jdbcType=INTEGER},
+      `work` = #{record.work,jdbcType=INTEGER},
+      help_classmates = #{record.helpClassmates,jdbcType=INTEGER},
+      discussion_degree = #{record.discussionDegree,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.njit.stusystem.model.Classroomcheck">
+    update tb_classroomcheck
+    <set>
+      <if test="schoolYear != null">
+        school_year = #{schoolYear,jdbcType=VARCHAR},
+      </if>
+      <if test="week != null">
+        week = #{week,jdbcType=VARCHAR},
+      </if>
+      <if test="creatTime != null">
+        creat_time = #{creatTime,jdbcType=VARCHAR},
+      </if>
+      <if test="stuId != null">
+        stu_id = #{stuId,jdbcType=INTEGER},
+      </if>
+      <if test="positiveDegree != null">
+        positive_degree = #{positiveDegree,jdbcType=INTEGER},
+      </if>
+      <if test="later != null">
+        later = #{later,jdbcType=INTEGER},
+      </if>
+      <if test="work != null">
+        `work` = #{work,jdbcType=INTEGER},
+      </if>
+      <if test="helpClassmates != null">
+        help_classmates = #{helpClassmates,jdbcType=INTEGER},
+      </if>
+      <if test="discussionDegree != null">
+        discussion_degree = #{discussionDegree,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.njit.stusystem.model.Classroomcheck">
+    update tb_classroomcheck
+    set school_year = #{schoolYear,jdbcType=VARCHAR},
+      week = #{week,jdbcType=VARCHAR},
+      creat_time = #{creatTime,jdbcType=VARCHAR},
+      stu_id = #{stuId,jdbcType=INTEGER},
+      positive_degree = #{positiveDegree,jdbcType=INTEGER},
+      later = #{later,jdbcType=INTEGER},
+      `work` = #{work,jdbcType=INTEGER},
+      help_classmates = #{helpClassmates,jdbcType=INTEGER},
+      discussion_degree = #{discussionDegree,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -80,6 +80,8 @@ public class TeacherController {
         return Result.builder().code(Result.SUCCESS_CODE).build();
     }
 
+    //
+
 
     /**根据教师id查询教师信息*/
     @ApiOperation(value = "根据ID查询教师信息",notes = "用于测试接口")
@@ -182,10 +184,9 @@ public class TeacherController {
     public Result<List<StuAndCourseDTO>> deleteStuAndCourseByCheck(@RequestBody Map<String,List> map)
     {
         ((List<Integer>)map.get("list")).stream().forEach(t->{
+
             teacherService.deleteStuAndCourseByCheck(t);
         });
-        System.out.println("yearList: "+((List<Integer>)map.get("yearList")).get(0));
-        System.out.println("yearList: "+((List<Integer>)map.get("teacherIdList")).get(0));
         int year=((List<Integer>)map.get("yearList")).get(0);
         int id=((List<Integer>)map.get("teacherIdList")).get(0);
         List<StuAndCourseDTO> list=teacherService.selectCourseByYears(year,id);

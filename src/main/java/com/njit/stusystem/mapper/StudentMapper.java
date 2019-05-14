@@ -1,5 +1,6 @@
 package com.njit.stusystem.mapper;
 
+import com.njit.stusystem.dto.StuIdDTO;
 import com.njit.stusystem.dto.StudentDTO;
 import com.njit.stusystem.dto.TeaAndStuDTO;
 import com.njit.stusystem.model.Student;
@@ -42,6 +43,15 @@ public interface StudentMapper {
     /**根据学生id查询学生信息*/
     @Select("select * from tb_student where tb_student.id=#{id}")
     StudentDTO selectById(@Param("id") Integer id);
+
+    // 根据教师id查询本班学生全部学号
+    @Select("SELECT\n" +
+            "s.id\n" +
+            "FROM\n" +
+            "tb_student AS s\n" +
+            "WHERE\n" +
+            "s.teacher_id = #{id}")
+    List<StuIdDTO> selectStuIdByteacherID(@Param("id") int id);
 
     long countByExample(StudentExample example);
 
