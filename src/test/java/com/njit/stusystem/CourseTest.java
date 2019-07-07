@@ -36,13 +36,13 @@ public class CourseTest extends BaseTest {
     @Test
     public void testSelectCourseByYears()
     {
-        System.out.println(checkService.selectClassroomTimeByStuId(202151336));
+        System.out.println(checkService.selectByStuIdAndYearAndWeek(202151336,"第一学期","第一周"));
     }
 
     @Test
     public void test()
     {
-        System.out.println(courseMapper.selectStuIdAndYearByTeacherId(6));
+        System.out.println(classroomcheckMapper.selectClassroomTimeByStuId(202151336));
     }
     @Test
     public void testInsert()

@@ -31,6 +31,28 @@ public interface EtiquettecheckMapper {
             "e.`week` = #{week}")
     List<EtiquetteDTO> selectByIdAndYearAndWeek(@Param("id") int id, @Param("week") String week, @Param("year") String year);
 
+    @Select("SELECT\n" +
+            "e.id,\n" +
+            "e.school_year,\n" +
+            "e.`week`,\n" +
+            "e.create_time,\n" +
+            "e.stu_id,\n" +
+            "e.respect,\n" +
+            "e.keep_rules,\n" +
+            "e.civilized,\n" +
+            "e.health,\n" +
+            "e.flag,\n" +
+            "stu.student_name\n" +
+            "FROM\n" +
+            "tb_etiquettecheck AS e ,\n" +
+            "tb_student AS stu\n" +
+            "WHERE\n" +
+            "stu.id = e.stu_id AND\n" +
+            "e.stu_id = #{id} AND\n" +
+            "e.school_year = #{year} AND\n" +
+            "e.`week` = #{week}\n")
+    List<EtiquetteDTO> selectByStuIdAndYearAndWeek(@Param("id") int id,  @Param("year") String year,@Param("week") String week);
+
     long countByExample(EtiquettecheckExample example);
 
     int deleteByExample(EtiquettecheckExample example);

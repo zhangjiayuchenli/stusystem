@@ -40,6 +40,16 @@ public class CheckController {
         return Result.<List<BreakExerciseDTO>>builder().code(SUCCESS_CODE).res(BreakExerciseDTOList).build();
     }
 
+    // 学生获取个人课间操学生信息
+    @GetMapping("getStuBreak")
+    public Result getStuBreak(String year, String week, HttpSession session)
+    {
+        log.info(week);
+        int id=(Integer)session.getAttribute("id");
+        List<BreakExerciseDTO> BreakExerciseDTOList=checkService.selectByStuIdAndYearAndWeek(id,year,week);
+        return Result.<List<BreakExerciseDTO>>builder().code(SUCCESS_CODE).res(BreakExerciseDTOList).build();
+    }
+
     // 获取本班礼仪规范学生信息
     @GetMapping("getEtiquetteCheck")
     public Result getEtiquetteDTOCheck(String year, String week, HttpSession session)
@@ -50,12 +60,30 @@ public class CheckController {
         return Result.<List<EtiquetteDTO>>builder().code(SUCCESS_CODE).res(EtiquetteDTOList).build();
     }
 
+    @GetMapping("getStuEtiquette")
+    public Result getStuEtiquette(String year, String week, HttpSession session)
+    {
+        log.info(week);
+        int id=(Integer)session.getAttribute("id");
+        List<EtiquetteDTO> EtiquetteDTOList=checkService.selectEtiquetteDTOByStuIdAndYearAndWeek(id,year,week);
+        return Result.<List<EtiquetteDTO>>builder().code(SUCCESS_CODE).res(EtiquetteDTOList).build();
+    }
+
     @GetMapping("getClassroomCheck")
     public Result getClassroomCheck(String year,String week,HttpSession session)
     {
         log.info(week);
         int id=(Integer)session.getAttribute("id");
         List<ClassroomDTO> classroomDTOList=checkService.selectClassroomByIdAndYearAndWeek(id,year,week);
+        return Result.<List<ClassroomDTO>>builder().code(SUCCESS_CODE).res(classroomDTOList).build();
+    }
+
+    @GetMapping("getStuClass")
+    public Result getStuClass(String year,String week,HttpSession session)
+    {
+        log.info(week);
+        int id=(Integer)session.getAttribute("id");
+        List<ClassroomDTO> classroomDTOList=checkService.selectClassroomByStuIdAndYearAndWeek(year,week,id);
         return Result.<List<ClassroomDTO>>builder().code(SUCCESS_CODE).res(classroomDTOList).build();
     }
 
@@ -171,8 +199,8 @@ public class CheckController {
     @GetMapping("getClassroomStuOfCreatetime")
     public Result getClassroomStuOfCreatetime(int studentId)
     {
-        List<StuIdDTO> list=checkService.selectStuIdByteacherID(studentId);
-        return Result.<List<StuIdDTO>>builder().code(SUCCESS_CODE).res(list).build();
+        List<CreateTimeDto> list=checkService.selectClassroomTimeByStuId(studentId);
+        return Result.<List<CreateTimeDto>>builder().code(SUCCESS_CODE).res(list).build();
     }
 
     @PostMapping("insertClassroom")
@@ -245,7 +273,6 @@ public class CheckController {
             System.out.println(ex.getMessage());
 
         }
-
         checkService.updateEtiquette(classroomcheck);
         int id=(Integer)session.getAttribute("id");
         String year=classroomcheck.getSchoolYear();

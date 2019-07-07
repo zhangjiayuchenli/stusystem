@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -70,10 +71,12 @@ public class StudentController {
 
     /**学生根据学年获得每学期各科成绩*/
     @GetMapping("selectCourseByYears")
-    public Result<StuAndCourseDTO> selectCourseByYears(Integer year, HttpSession session)
+    public Result selectCourseByYears(Integer year, HttpSession session)
     {
         int id=(Integer)session.getAttribute("id");
-        return Result.<StuAndCourseDTO>builder().res(studentService.selectCourseByStuIdAndYear(id,year)).build();
+        List<StuAndCourseDTO> list=new ArrayList<>();
+        list.add(studentService.selectCourseByStuIdAndYear(id,year));
+        return Result.<List<StuAndCourseDTO>>builder().res(list).build();
     }
 
     /**修改学生信息*/

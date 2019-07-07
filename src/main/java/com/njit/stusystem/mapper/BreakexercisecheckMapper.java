@@ -31,6 +31,28 @@ public interface BreakexercisecheckMapper {
             "b.`week` = #{week}")
     List<BreakExerciseDTO> selectByIdAndYearAndWeek(@Param("id") int id, @Param("week") String week, @Param("year") String year);
 
+    @Select("SELECT\n" +
+            "stu.student_name,\n" +
+            "b.school_year,\n" +
+            "b.id,\n" +
+            "b.`week`,\n" +
+            "b.create_time,\n" +
+            "b.stu_id,\n" +
+            "b.later,\n" +
+            "b.eye_exercises,\n" +
+            "b.pre_exercises,\n" +
+            "b.queue_neat,\n" +
+            "b.action_standard\n" +
+            "FROM\n" +
+            "tb_breakexercisecheck AS b ,\n" +
+            "tb_student AS stu\n" +
+            "WHERE\n" +
+            "b.stu_id = stu.id AND\n" +
+            "b.stu_id = #{id} AND\n" +
+            "b.school_year = #{year} AND\n" +
+            "b.`week` = #{week}")
+    List<BreakExerciseDTO> selectByStuIdAndYearAndWeek(@Param("id") int id,  @Param("year") String year,@Param("week") String week);
+
     long countByExample(BreakexercisecheckExample example);
 
     int deleteByExample(BreakexercisecheckExample example);

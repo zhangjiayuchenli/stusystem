@@ -58,9 +58,15 @@ public class CheckService {
         return b.insertSelective(record);
     }
 
+    //通过教师id
     public List<BreakExerciseDTO> selectByIdAndYearAndWeek( int id,String year,String week )
     {
         return b.selectByIdAndYearAndWeek(id,week,year);
+    }
+    //通过学生id
+    public List<BreakExerciseDTO> selectByStuIdAndYearAndWeek( int id,String year,String week )
+    {
+        return b.selectByStuIdAndYearAndWeek(id,year,week);
     }
 
     public List<EtiquetteDTO> selectEtiquetteDTOByIdAndYearAndWeek(int id, String year, String week )
@@ -68,10 +74,21 @@ public class CheckService {
         return e.selectByIdAndYearAndWeek(id,week,year);
     }
 
+    public List<EtiquetteDTO> selectEtiquetteDTOByStuIdAndYearAndWeek(int id, String year, String week )
+    {
+        return e.selectByStuIdAndYearAndWeek(id,year,week);
+    }
+
     // 查询本班学生的课堂情况
     public List<ClassroomDTO> selectClassroomByIdAndYearAndWeek(int id, String year, String week)
     {
         return c.selectByIdAndYearAndWeek(id,week,year);
+    }
+
+    // 查询本班学生的课堂情况
+    public List<ClassroomDTO> selectClassroomByStuIdAndYearAndWeek( String year, String week,int id)
+    {
+        return c.selectByStuIdAndYearAndWeek(year,week,id);
     }
 
     public int deleteEtiquette(int id)
